@@ -1,12 +1,7 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({blog}) => {
-  const [blogs, setBlogs] = useState({})
-  const [blogInfoVisible, setblogInfoVisible] = useState(false)
-
-  const hideWhenVisible = { display: blogInfoVisible ? 'none' : '' }
-  const showWhenVisible = { display: blogInfoVisible ? '' : 'none' }
+const Blog = ({blog, updateBlog, changeViewState}) => {
+  const [blogInfoVisible, setBlogInfoVisible] = useState(false)
 
   const divStyle = {
     width: '400px',
@@ -14,31 +9,68 @@ const Blog = ({blog}) => {
     padding: '10px'
   }
 
-  const addLike = (event) => {
-    event.preventDefault()
-    blogService.update(blog.id, {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes+1})
+  const infoHandler = () => {
+    setBlogInfoVisible(!blogInfoVisible)
+    changeViewState(blog)
+  }
+
+  const handleLike = () => {
+    updateBlog(blog);
   }
 
   return(
-  <div style={divStyle}>
-    <div>
-      {blog.title}
-    </div>
-    <div style={showWhenVisible}>
-      <button onClick={() => setblogInfoVisible(blogInfoVisible => !blogInfoVisible)}>hide</button>
-      <div>{blog.url}</div>
-      <div>{blog.likes}<button onClick={addLike}>like</button></div>
-      <div>{blog.author}</div>
-    </div>
-    <div style={hideWhenVisible}>
-      <button onClick={() => setblogInfoVisible(blogInfoVisible => !blogInfoVisible)}>view</button>
-    </div>
-
+  <div style={divStyle} className='blog'>
+    <div>{blog.title}</div>
+    {blogInfoVisible === true ?
+      <div>
+        <button onClick={infoHandler}>hide</button>
+        <div>{blog.url}</div>
+        <div>{blog.likes}<button onClick={handleLike}>like</button></div>
+        <div>{blog.author}</div>
+      </div> :
+      <div>
+        <button onClick={infoHandler}>view</button>
+      </div>
+    }
   </div>  
 )}
 
 export default Blog
+
+
+
+
+
+
+
+
+
+// import { useState } from 'react'
+
+// const Blog = ({ blog, updateBlog, viewChange }) => {
+//   const [infoVisible, setInfoVisible] = useState(false)
+
+// const infoHandler = () => {
+//   setInfoVisible(!infoVisible)
+//   viewChange(blog)
+// }
+
+// const handleLike = () => {
+//   updateBlog(blog)
+// };
+
+//   return (
+//     <div>
+
+//       <div className='blog'>
+//       {infoVisible === false ?
+//       <div><div>{blog.title}</div><button onClick={infoHandler}>View</button></div> :
+//       <div><div>{blog.title}</div><div>{blog.url}</div><div>{blog.likes}</div> <div>{blog.author}</div> <button onClick={infoHandler}>Hide</button></div>
+//       }
+//       </div>
+//       <button onClick={handleLike}>Like</button>
+//     </div>
+//   )
+// }
+
+// export default Blog

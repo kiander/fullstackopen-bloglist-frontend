@@ -28,12 +28,22 @@ const App = () => {
     }
   }, [])
 
-  const addBlog= (blogObject) => {
-    blogService
-      .create(blogObject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-      })
+  const addBlog = async (blogObject) => {
+    const res = await blogService.create(blogObject)
+        setBlogs(blogs.concat(res))
+  }
+
+  const updateBlog = async (blogObject) => {
+    const newBlog = { ...blogObject, user: blogObject.user.id, likes: blogObject.likes+1};
+    await blogService.update(blogObject.id, newBlog)
+
+    const newBlogs = [...blogs];
+    newBlogs[newBlogs.findIndex(x => x.id === blogObject.id)].likes += 1;
+    setBlogs(newBlogs)
+  }
+
+  const changeBlogViewState = async(blog) => {
+
   }
 
   const handleLogin = async (event) => {
@@ -82,7 +92,7 @@ const App = () => {
     <div>
       <h2>Blogs</h2>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} changeViewState={changeBlogViewState}/>
       )}
     </div>
   </div>
