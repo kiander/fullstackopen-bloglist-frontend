@@ -22,30 +22,30 @@ const BlogForm = ({ createBlog }) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={() => setAddBlogVisible(true)}>Add Blog</button>
+        <button id='add-blog-button' onClick={() => setAddBlogVisible(true)}>Add Blog</button>
       </div>
       <div style={showWhenVisible}>
         <form onSubmit={addBlog}>
         <div> Title 
-          <input
+          <input id='title'
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div> Author 
-          <input
+          <input id='author'
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div> Url 
-          <input
+          <input id='url'
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <br /> 
-        <button type="submit">save</button>
+        <button id='save-blog-button' type="submit">save</button>
         </form>
       </div>
     </div>

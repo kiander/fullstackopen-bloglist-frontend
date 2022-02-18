@@ -10,6 +10,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     blogService
@@ -31,6 +32,18 @@ const App = () => {
   const addBlog = async (blogObject) => {
     const res = await blogService.create(blogObject)
         setBlogs(blogs.concat(res))
+  }
+
+  const Notification = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+
+    return (
+      <div className="error">
+        {message}
+      </div>
+    )
   }
 
   const updateBlog = async (blogObject) => {
@@ -62,7 +75,9 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch (exception) {
+      setErrorMessage('wrong credentials')
       setTimeout(() => {
+        setErrorMessage(null)
       }, 5000)
     }
   }
@@ -75,6 +90,7 @@ const App = () => {
 
   return (
   <div>
+      <Notification message={errorMessage} />
       {user === null ?
       <LoginForm
         username={username}
@@ -83,13 +99,13 @@ const App = () => {
         handlePasswordChange={({ target }) => setPassword(target.value)}
         handleSubmit={handleLogin}
       /> :
-      <div>
+      <div id='login-done-div'>
         <p>{user.name} logged in</p>
         <BlogForm createBlog={addBlog}/><br /> 
         <button onClick={handleLogOut}>Logout</button> 
       </div>
     }
-    <div>
+    <div id='blog-list'>
       <h2>Blogs</h2>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} updateBlog={updateBlog} changeViewState={changeBlogViewState}/>
